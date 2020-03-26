@@ -1,3 +1,21 @@
 <resources>
     <string name="app_name">Fokkuy</string>
+    <string name="title_activity_login">Sign in</string>
+<!--    <string name="prompt_email">Email</string>-->
+<!--    <string name="prompt_password">Password</string>-->
+<!--    <string name="action_sign_in">Sign in or register</string>-->
+<!--    <string name="action_sign_in_short">Sign in</string>-->
+<!--    <string name="welcome">"Welcome !"</string>-->
+<!--    <string name="invalid_username">Not a valid username</string>-->
+<!--    <string name="invalid_password">Password must be >5 characters</string>-->
+<!--    <string name="login_failed">"Login failed"</string>-->
+<!--    <string name="default_web_client_id" />-->
+<!--    <string name="label_google_sign_in">Firebase + Google Sign In</string>-->
+<!--    <string name="desc_google_sign_in">Use a Google Sign In credential to authenticate with Firebase.</string>-->
+    <string name="google_status_fmt">Google User: %s</string>
+    <string name="google_title_text">Google Sign In</string>
+    <string name="firebase_status_fmt">Firebase UID: %s</string>
+    <string name="firebase_user_management">Firebase User Management</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="signed_out">Signed Out</string>
 </resources>
