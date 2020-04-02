@@ -8,6 +8,7 @@
     <color name="colorSecondaryDark">#002f6c</color>
     <color name="colorSecondaryLight">#4f83cc</color>
     <color name="backgroundWhite">#FFFFFF</color>
+    <color name="grey_500">#607d8b</color>
 
     <color name="textColorPrimary">#ffffff</color>
     <color name="textColorSecondary">#ffffff</color>
