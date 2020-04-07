@@ -152,6 +152,11 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
 open class BaseActivity: AppCompatActivity(){
     private var progressBar: ProgressBar? = null
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_login)
+    }
+
     fun setProgressBar(resId: Int) {
         progressBar = findViewById(resId)
     }

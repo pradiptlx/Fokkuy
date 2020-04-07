@@ -15,9 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            app:backgroundTint="@color/colorSecondary"
-            app:navigationIcon="@drawable/ic_dehaze_black_24dp" />
-
+            app:backgroundTint="@color/colorSecondary"/>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fabButton"
@@ -72,7 +70,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="@string/default_timer"
+            android:text="@string/timer_countdown"
             android:textSize="70sp" />
 
         <me.zhanghai.android.materialprogressbar.MaterialProgressBar
