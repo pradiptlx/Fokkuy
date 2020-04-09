@@ -52,6 +52,18 @@ class PrefUtils {
             editor.putLong(SECONDS_REMAINING, seconds)
             editor.apply()
         }
+
+        private const val TIMER_BACKGROUND_ID = "com.fpradipt.fokkuy.timer_background"
+
+        fun getAlarmTime(context: Context): Long {
+            val preferences = PreferenceManager.getDefaultSharedPreferences(context)
+            return preferences.getLong(TIMER_BACKGROUND_ID, 0)
+        }
+
+        fun setAlarmTime(time: Long, context: Context) {
+            val editor = PreferenceManager.getDefaultSharedPreferences(context)
+            editor.edit().putLong(TIMER_BACKGROUND_ID, time).apply()
+        }
     }
 
 }

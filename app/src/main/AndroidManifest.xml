@@ -9,11 +9,21 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".TimerActivity"></activity>
-        <activity
-            android:name=".NavigationDrawerSide"
-            android:label="@string/title_activity_navigation_drawer_side"
-            android:theme="@style/AppTheme.NoActionBar" />
+        <receiver
+            android:name=".TimerNotificationReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="reset"/>
+                <action android:name="start"/>
+                <action android:name="resume"/>
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".TimerExpiredReceiver"
+            android:enabled="true"
+            android:exported="true" />
+
         <activity android:name=".LoginActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>

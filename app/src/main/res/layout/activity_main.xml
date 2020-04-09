@@ -82,5 +82,14 @@
             android:minWidth="306dp"
             android:minHeight="360dp" />
 
+<!--        <Button-->
+<!--            android:id="@+id/gsoButton"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:background="@drawable/ic_account_circle_black_24dp"-->
+<!--            android:text="@string/google_title_text"-->
+<!--            app:layout_anchor="@+id/progressCountdown"-->
+<!--            app:layout_anchorGravity="bottom|center" />-->
+
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
