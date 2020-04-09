@@ -10,14 +10,14 @@
         android:pivotX="50%"
         android:pivotY="50%"
         android:interpolator="@android:anim/linear_interpolator"
-        android:duration="300"
+        android:duration="3000"
         />
 
     <scale
         android:fromAlpha="1.0"
         android:toAlpha="0.0"
         android:interpolator="@android:anim/linear_interpolator"
-        android:duration="300"
+        android:duration="3000"
         />
 
 </set>
