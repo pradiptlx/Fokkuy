@@ -10,8 +10,16 @@ class PrefUtils {
         private const val PREVIOUS_TIMER_LENGTH_SECONDS_ID =
             "com.fpradipt.fokkuy.previous_timer_length_seconds"
 
+        private const val TIMER_VALUE = "timer_value"
+
+        fun setTimerLength(minutes:Int, context: Context){
+            val editor = PreferenceManager.getDefaultSharedPreferences(context).edit()
+            editor.putInt(TIMER_VALUE, minutes).apply()
+        }
+
         fun getTimerLength(context: Context): Int {
-            return 1
+            val preferenceManager = PreferenceManager.getDefaultSharedPreferences(context)
+            return preferenceManager.getInt(TIMER_VALUE, 1)
         }
 
         fun getPreviousTimerLengthSeconds(context: Context): Long {

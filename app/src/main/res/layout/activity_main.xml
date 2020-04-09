@@ -82,7 +82,14 @@
             android:minWidth="306dp"
             android:minHeight="360dp" />
 
-<!--        <Button-->
+        <SeekBar
+            android:id="@+id/simpleSeekBar"
+            android:max="60"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_anchor="@+id/startTimerButton"
+            app:layout_anchorGravity="top|center" />
+        <!--        <Button-->
 <!--            android:id="@+id/gsoButton"-->
 <!--            android:layout_width="wrap_content"-->
 <!--            android:layout_height="wrap_content"-->

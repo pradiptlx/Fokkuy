@@ -22,7 +22,7 @@ class NotificationService {
 
         fun showTimerStop(context: Context) {
             val intent = Intent(context, TimerNotificationReceiver::class.java)
-            intent.action = MainActivity.ACTION_STOP
+            intent.action = MainActivity.ACTION_START
 
             val pendingIntent =
                 PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)

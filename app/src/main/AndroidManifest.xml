@@ -14,9 +14,9 @@
             android:enabled="true"
             android:exported="false">
             <intent-filter>
-                <action android:name="reset"/>
-                <action android:name="start"/>
-                <action android:name="resume"/>
+                <action android:name="reset" />
+                <action android:name="start" />
+                <action android:name="resume" />
             </intent-filter>
         </receiver>
         <receiver

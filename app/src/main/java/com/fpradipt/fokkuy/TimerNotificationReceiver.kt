@@ -27,7 +27,7 @@ class TimerNotificationReceiver : BroadcastReceiver() {
                 MainActivity.removeAlarm(context)
 
                 PrefUtils.setTimerState(TimerState.Paused, context)
-                NotificationService.showTimerPause(context, secondsRemaining)
+                NotificationService.showTimerPause(context)
             }
 
             MainActivity.ACTION_RESUME -> {

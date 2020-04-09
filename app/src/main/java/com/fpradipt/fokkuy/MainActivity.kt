@@ -12,6 +12,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.animation.AnimationUtils
+import android.widget.SeekBar
 import android.widget.Toast
 import com.fpradipt.fokkuy.databinding.ActivityMainBinding
 import androidx.databinding.DataBindingUtil
@@ -109,6 +110,23 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             }
         }
 
+        simpleSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener{
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+//                Toast.makeText(this@MainActivity, progress.toString(), Toast.LENGTH_SHORT).show()
+                PrefUtils.setTimerLength(progress, this@MainActivity)
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+                Toast.makeText(applicationContext, "Change Timer", Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                if (seekBar != null) {
+                    Toast.makeText(applicationContext, seekBar.progress.toString(), Toast.LENGTH_SHORT).show()
+                    PrefUtils.setTimerLength(seekBar.progress, this@MainActivity)
+                }
+            }
+        })
         startTimerButton.setOnClickListener(this)
         pauseTimerButton.setOnClickListener(this)
         resetTimerButton.setOnClickListener(this)
@@ -261,7 +279,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             val wakeUpTime = setAlarm(this, nowSeconds, secondsRemaining)
             NotificationService.showTimerRunning(this, wakeUpTime)
         } else if (timerState === TimerState.Paused) {
-            NotificationService.showTimerPause(this, secondsRemaining)
+            NotificationService.showTimerPause(this)
         }
 
         PrefUtils.setPreviousTimerLengthSeconds(timerLengthSeconds, this)
