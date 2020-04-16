@@ -15,7 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            app:backgroundTint="@color/colorSecondary"/>
+            app:backgroundTint="@color/colorSecondary" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fabButton"
@@ -32,11 +32,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center|top"
+            android:visibility="invisible"
             app:backgroundTint="@color/colorAccent"
             app:fabSize="mini"
             app:layout_anchor="@+id/fabButton"
             app:layout_anchorGravity="top|center"
-            android:visibility="invisible"
             app:srcCompat="@drawable/ic_play_arrow_white_24dp" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -45,11 +45,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center|start"
+            android:visibility="invisible"
             app:backgroundTint="@color/colorAccent"
             app:fabSize="mini"
             app:layout_anchor="@+id/fabButton"
             app:layout_anchorGravity="start|top"
-            android:visibility="invisible"
             app:srcCompat="@drawable/ic_pause_white_24dp" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -58,45 +58,53 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end|center"
+            android:visibility="invisible"
             app:backgroundTint="@color/colorAccent"
             app:fabSize="mini"
             app:layout_anchor="@+id/fabButton"
             app:layout_anchorGravity="end|top"
-            android:visibility="invisible"
             app:srcCompat="@drawable/ic_history_white_24dp" />
 
-        <TextView
-            android:id="@+id/timerCountdown"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/timer_countdown"
-            android:textSize="70sp" />
 
-        <me.zhanghai.android.materialprogressbar.MaterialProgressBar
-            android:id="@+id/progressCountdown"
-            style="@style/Widget.MaterialProgressBar.ProgressBar"
-            android:layout_width="240dp"
-            android:layout_height="240dp"
-            android:layout_gravity="center"
-            android:minWidth="306dp"
-            android:minHeight="360dp" />
-
-        <SeekBar
+        <!--<SeekBar
             android:id="@+id/simpleSeekBar"
-            android:max="60"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:max="60"
             app:layout_anchor="@+id/startTimerButton"
-            app:layout_anchorGravity="top|center" />
-        <!--        <Button-->
-<!--            android:id="@+id/gsoButton"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:background="@drawable/ic_account_circle_black_24dp"-->
-<!--            android:text="@string/google_title_text"-->
-<!--            app:layout_anchor="@+id/progressCountdown"-->
-<!--            app:layout_anchorGravity="bottom|center" />-->
+            app:layout_anchorGravity="top|center" />-->
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center">
+
+            <com.agilie.circularpicker.ui.view.CircularPickerView
+                android:id="@+id/circularPicker"
+                android:layout_width="400dp"
+                android:layout_height="400dp"
+                android:layout_gravity="center"
+
+                />
+
+            <TextView
+                android:id="@+id/timerCountdown"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/timer_countdown"
+                android:textSize="70sp" />
+
+            <me.zhanghai.android.materialprogressbar.MaterialProgressBar
+                android:id="@+id/progressCountdown"
+                style="@style/Widget.MaterialProgressBar.ProgressBar"
+                android:layout_width="240dp"
+                android:layout_height="240dp"
+                android:layout_gravity="center"
+                android:minWidth="306dp"
+                android:minHeight="360dp" />
+        </FrameLayout>
+
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

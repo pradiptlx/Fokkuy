@@ -4,18 +4,20 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.util.Log
 import android.view.Menu
-import android.view.MenuItem
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.SeekBar
 import android.widget.Toast
-import com.fpradipt.fokkuy.databinding.ActivityMainBinding
-import androidx.databinding.DataBindingUtil
+import com.agilie.circularpicker.presenter.CircularPickerContract
+import com.agilie.circularpicker.ui.view.CircularPickerView
+import com.agilie.circularpicker.ui.view.PickerPagerTransformer
+import com.fpradipt.fokkuy.receiver.TimerExpiredReceiver
 import com.fpradipt.fokkuy.utils.NotificationService
 import com.fpradipt.fokkuy.utils.PrefUtils
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -84,8 +86,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         resetTimerButton.visibility = View.INVISIBLE
 
         // Animation
-        val fabOpen = AnimationUtils.loadAnimation(this, R.anim.fab_open)
-        val fabClose = AnimationUtils.loadAnimation(this, R.anim.fab_close)
+        /*val fabOpen = AnimationUtils.loadAnimation(this, R.anim.fab_open)
+        val fabClose = AnimationUtils.loadAnimation(this, R.anim.fab_close)*/
         val fabRClockwise = AnimationUtils.loadAnimation(this, R.anim.rotate_clockwise)
         val fabRAntiClockwise = AnimationUtils.loadAnimation(this, R.anim.rotate_anticlockwise)
 
@@ -110,26 +112,44 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             }
         }
 
-        simpleSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener{
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-//                Toast.makeText(this@MainActivity, progress.toString(), Toast.LENGTH_SHORT).show()
-                PrefUtils.setTimerLength(progress, this@MainActivity)
-            }
-
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {
-                Toast.makeText(applicationContext, "Change Timer", Toast.LENGTH_SHORT).show()
-            }
-
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {
-                if (seekBar != null) {
-                    Toast.makeText(applicationContext, seekBar.progress.toString(), Toast.LENGTH_SHORT).show()
-                    PrefUtils.setTimerLength(seekBar.progress, this@MainActivity)
-                }
-            }
-        })
         startTimerButton.setOnClickListener(this)
         pauseTimerButton.setOnClickListener(this)
         resetTimerButton.setOnClickListener(this)
+
+        circularPicker.apply {
+            colors = (intArrayOf(
+                Color.parseColor("#00EDE9"),
+                Color.parseColor("#0087D9"),
+                Color.parseColor("#8A1CC3")
+            ))
+
+            gradientAngle = 220
+            maxLapCount = 1
+            currentValue = 1
+            maxValue = 60
+            centeredTextSize = 60f
+
+            valueChangedListener = (object : CircularPickerContract.Behavior.ValueChangedListener {
+                override fun onValueChanged(value: Int) {
+                    Log.d("COUNT", value.toString())
+                    if (timerState === TimerState.Stopped){
+                        timerCountdown.text =
+                            "${value.toString()}:00"
+                        secondsRemaining = value * 60L
+                    }
+                    else
+                        timerCountdown.text =
+                            "${(timerLengthSeconds / 60).toString()}:00"
+                    PrefUtils.setTimerLength(value, this@MainActivity)
+
+                }
+            })
+            colorChangedListener = (object : CircularPickerContract.Behavior.ColorChangedListener {
+                override fun onColorChanged(r: Int, g: Int, b: Int) {
+//                    timerCountdown.setHintTextColor(Color.rgb(r, g, b))
+                }
+            })
+        }
 //        gsoButton.setOnClickListener(this)
     }
 
@@ -137,7 +157,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         super.onStart()
 
         val currentUser = auth.currentUser
-        if (currentUser != null){
+        if (currentUser != null) {
             startActivity(getLaunchIntent(this))
             finish()
         }
@@ -164,10 +184,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     timer.cancel()
                     onTimerFinished()
                 }
-
-//                R.id.gsoButton -> {
-//                    signIn()
-//                }
             }
         }
     }
@@ -187,7 +203,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     private fun signIn() {
         val signInIntent = googleSignInClient.signInIntent
-        startActivityForResult(signInIntent,
+        startActivityForResult(
+            signInIntent,
             RC_SIGN_IN
         )
     }
@@ -209,7 +226,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             }
     }
 
-    private fun initTimer() {
+    private fun resumeTimer() {
         timerState = PrefUtils.getTimerState(this)
 
         if (timerState === TimerState.Stopped)
@@ -224,18 +241,18 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 timerLengthSeconds
 
         val alarmTime = PrefUtils.getAlarmTime(this)
-        if (alarmTime > 0){
+        if (alarmTime > 0) {
             val afterPauseTime = nowSeconds - alarmTime
             secondsRemaining -= nowSeconds - alarmTime
         }
 
-        if(secondsRemaining <= 0)
+        if (secondsRemaining <= 0)
             onTimerFinished()
-        else if(timerState == TimerState.Running)
+        else if (timerState == TimerState.Running)
             startTimer()
 
-//        updateCountdownUI()
-//        updateButtons()
+        updateCountdownUI()
+        updateButtons()
     }
 
     private fun startTimer() {
@@ -263,7 +280,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         super.onResume()
 
         // Start again
-        initTimer()
+        resumeTimer()
 
         // If activity shows again, remove broadcast intent
         removeAlarm(this)
@@ -294,15 +311,19 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     private fun updateCountdownUI() {
         val minutesUntilFinished = secondsRemaining / 60 // Convert to minute
-        val secondsInMinuteUntilFinished = secondsRemaining - minutesUntilFinished * 60 // If minutes > 0, secondsInMinutesUntilFinished !== secondsRemaining
+        val secondsInMinuteUntilFinished =
+            secondsRemaining - minutesUntilFinished * 60 // If minutes > 0, secondsInMinutesUntilFinished !== secondsRemaining
         val secondsStr = secondsInMinuteUntilFinished.toString()
         timerCountdown.text =
             "$minutesUntilFinished:${if (secondsStr.length == 2) secondsStr else "0" + secondsStr}"
         progressCountdown.progress = (timerLengthSeconds - secondsRemaining).toInt()
+        circularPicker.apply {
+            currentValue = PrefUtils.getTimerLength(this@MainActivity)
+        }
     }
 
-    private fun updateButtons(){
-        when(timerState){
+    private fun updateButtons() {
+        when (timerState) {
             TimerState.Running -> {
                 startTimerButton.isEnabled = false
                 pauseTimerButton.isEnabled = true
@@ -315,7 +336,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             }
             TimerState.Stopped -> {
                 startTimerButton.isEnabled = true
-                pauseTimerButton.isEnabled = true
+                pauseTimerButton.isEnabled = false
                 resetTimerButton.isEnabled = false
             }
         }
@@ -324,13 +345,14 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private fun onTimerFinished() {
         timerState = TimerState.Stopped
 
-        //set the length of the timer to be the one set in SettingsActivity
-        //if the length was changed when the timer was running
         setNewTimerLength()
 
         progressCountdown.progress = 0
 
-        PrefUtils.setSecondsRemaining(timerLengthSeconds, this)
+        val timerUiLength = PrefUtils.getTimerLength(this)
+        Toast.makeText(this, (timerUiLength).toString(), Toast.LENGTH_SHORT).show()
+
+        PrefUtils.setSecondsRemaining(timerUiLength * 60L, this)
         secondsRemaining = timerLengthSeconds
 
         updateButtons()
