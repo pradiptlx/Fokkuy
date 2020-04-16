@@ -1,8 +1,10 @@
-package com.fpradipt.fokkuy
+package com.fpradipt.fokkuy.receiver
 
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import com.fpradipt.fokkuy.MainActivity
+import com.fpradipt.fokkuy.TimerState
 import com.fpradipt.fokkuy.utils.NotificationService
 import com.fpradipt.fokkuy.utils.PrefUtils
 
@@ -20,7 +22,8 @@ class TimerNotificationReceiver : BroadcastReceiver() {
             MainActivity.ACTION_PAUSE -> {
                 var secondsRemaining = PrefUtils.getSecondsRemaining(context)
                 val alarmTime = PrefUtils.getAlarmTime(context)
-                val nowSeconds = MainActivity.nowSeconds
+                val nowSeconds =
+                    MainActivity.nowSeconds
 
                 secondsRemaining -= nowSeconds - alarmTime
                 PrefUtils.setSecondsRemaining(secondsRemaining, context)
@@ -31,8 +34,13 @@ class TimerNotificationReceiver : BroadcastReceiver() {
             }
 
             MainActivity.ACTION_RESUME -> {
-                var secondsRemaining = PrefUtils.getSecondsRemaining(context)
-                val wakeUpTime = MainActivity.setAlarm(context, MainActivity.nowSeconds, secondsRemaining)
+                val secondsRemaining = PrefUtils.getSecondsRemaining(context)
+                val wakeUpTime =
+                    MainActivity.setAlarm(
+                        context,
+                        MainActivity.nowSeconds,
+                        secondsRemaining
+                    )
                 PrefUtils.setTimerState(TimerState.Running, context)
                 NotificationService.showTimerRunning(context, wakeUpTime)
             }
@@ -40,7 +48,12 @@ class TimerNotificationReceiver : BroadcastReceiver() {
             MainActivity.ACTION_START -> {
                 val time = PrefUtils.getTimerLength(context)
                 val secondsRemaining = time * 60L
-                val wakeUpTime = MainActivity.setAlarm(context, MainActivity.nowSeconds, secondsRemaining)
+                val wakeUpTime =
+                    MainActivity.setAlarm(
+                        context,
+                        MainActivity.nowSeconds,
+                        secondsRemaining
+                    )
                 NotificationService.showTimerRunning(context, wakeUpTime)
             }
         }

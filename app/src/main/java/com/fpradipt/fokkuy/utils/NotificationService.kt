@@ -10,7 +10,7 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import com.fpradipt.fokkuy.MainActivity
 import com.fpradipt.fokkuy.R
-import com.fpradipt.fokkuy.TimerNotificationReceiver
+import com.fpradipt.fokkuy.receiver.TimerNotificationReceiver
 import java.text.SimpleDateFormat
 import java.util.*
 
