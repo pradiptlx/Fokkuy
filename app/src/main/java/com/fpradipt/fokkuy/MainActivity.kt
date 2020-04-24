@@ -12,11 +12,8 @@ import android.util.Log
 import android.view.Menu
 import android.view.View
 import android.view.animation.AnimationUtils
-import android.widget.SeekBar
 import android.widget.Toast
 import com.agilie.circularpicker.presenter.CircularPickerContract
-import com.agilie.circularpicker.ui.view.CircularPickerView
-import com.agilie.circularpicker.ui.view.PickerPagerTransformer
 import com.fpradipt.fokkuy.receiver.TimerExpiredReceiver
 import com.fpradipt.fokkuy.utils.NotificationService
 import com.fpradipt.fokkuy.utils.PrefUtils
@@ -136,6 +133,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                         timerCountdown.text =
                             "${value.toString()}:00"
                         secondsRemaining = value * 60L
+//                        PrefUtils.setTimerLength(value, this@MainActivity)
                     }
                     else
                         timerCountdown.text =
@@ -169,6 +167,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             when (v.id) {
                 R.id.startTimerButton -> {
                     timerState = TimerState.Running
+                    timerLengthSeconds = PrefUtils.getTimerLength(this) * 60L
                     startTimer()
                     updateButtons()
                 }
@@ -180,7 +179,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 }
 
                 R.id.resetTimerButton -> {
-//                    timerState = TimerState.Stopped
                     timer.cancel()
                     onTimerFinished()
                 }
@@ -311,11 +309,14 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     private fun updateCountdownUI() {
         val minutesUntilFinished = secondsRemaining / 60 // Convert to minute
+        Log.d("minutesUntilFinished", minutesUntilFinished.toString())
+        Log.d("timerLengthSeconds", timerLengthSeconds.toString())
         val secondsInMinuteUntilFinished =
             secondsRemaining - minutesUntilFinished * 60 // If minutes > 0, secondsInMinutesUntilFinished !== secondsRemaining
         val secondsStr = secondsInMinuteUntilFinished.toString()
         timerCountdown.text =
             "$minutesUntilFinished:${if (secondsStr.length == 2) secondsStr else "0" + secondsStr}"
+        Log.d("countdown", (timerLengthSeconds - secondsRemaining).toString())
         progressCountdown.progress = (timerLengthSeconds - secondsRemaining).toInt()
         circularPicker.apply {
             currentValue = PrefUtils.getTimerLength(this@MainActivity)
