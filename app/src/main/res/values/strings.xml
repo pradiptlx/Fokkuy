@@ -36,4 +36,9 @@
 
     <string name="home_second">Home Second</string>
     <string name="timer_countdown">1:00</string>
+    <string name="desc_profile_picture">Photo Profile</string>
+    <string name="about">About</string>
+    <string name="dashboard">Dashboard</string>
+    <string name="about_text">This is about</string>
+    <string name="timer">Timer</string>
 </resources>

@@ -84,7 +84,7 @@ dependencies {
     implementation 'me.zhanghai.android.materialprogressbar:library:1.6.1'
     implementation "androidx.preference:preference-ktx:1.1.1"
     implementation "com.agilie:circular-picker:1.0"
-
+    implementation "com.androidplot:androidplot-core:1.5.7"
 }
 apply plugin: 'com.google.gms.google-services'  // Google Services plugin
 

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation"
+    app:startDestination="@id/homeApp">
+
+<!--    <fragment-->
+<!--        android:id="@+id/dashboardUser"-->
+<!--        android:name="com.fpradipt.fokkuy.fragment.DashboardFragment"-->
+<!--        android:label="Dashboard User"-->
+<!--        tools:layout="@layout/fragment_dashboard" />-->
+
+    <fragment
+        android:id="@+id/homeApp"
+        android:name="com.fpradipt.fokkuy.fragment.HomeFragment"
+        android:label="Fokkuy"
+        tools:layout="@layout/fragment_home" />
+</navigation>

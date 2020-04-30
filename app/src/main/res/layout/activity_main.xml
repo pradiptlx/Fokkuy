@@ -3,108 +3,119 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+    <androidx.drawerlayout.widget.DrawerLayout
+        android:id="@+id/drawerLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/backgroundWhite">
+        android:layout_height="match_parent">
 
-        <com.google.android.material.bottomappbar.BottomAppBar
-            android:id="@+id/bottomBar"
-            style="@style/Widget.MaterialComponents.BottomAppBar"
+       <!-- <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            app:backgroundTint="@color/colorSecondary" />
+            android:layout_height="match_parent"
+            android:background="@color/backgroundWhite">
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fabButton"
-            style="@style/Widget.Design.FloatingActionButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_add_black_24dp"
-            app:backgroundTint="@color/colorAccent"
-            app:layout_anchor="@id/bottomBar" />
+            <com.google.android.material.bottomappbar.BottomAppBar
+                android:id="@+id/bottomBar"
+                style="@style/Widget.MaterialComponents.BottomAppBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                app:backgroundTint="@color/colorSecondary" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/startTimerButton"
-            style="@style/Widget.Design.FloatingActionButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center|top"
-            android:visibility="invisible"
-            app:backgroundTint="@color/colorAccent"
-            app:fabSize="mini"
-            app:layout_anchor="@+id/fabButton"
-            app:layout_anchorGravity="top|center"
-            app:srcCompat="@drawable/ic_play_arrow_white_24dp" />
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/pauseTimerButton"
-            style="@style/Widget.Design.FloatingActionButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center|start"
-            android:visibility="invisible"
-            app:backgroundTint="@color/colorAccent"
-            app:fabSize="mini"
-            app:layout_anchor="@+id/fabButton"
-            app:layout_anchorGravity="start|top"
-            app:srcCompat="@drawable/ic_pause_white_24dp" />
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/resetTimerButton"
-            style="@style/Widget.Design.FloatingActionButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end|center"
-            android:visibility="invisible"
-            app:backgroundTint="@color/colorAccent"
-            app:fabSize="mini"
-            app:layout_anchor="@+id/fabButton"
-            app:layout_anchorGravity="end|top"
-            app:srcCompat="@drawable/ic_history_white_24dp" />
-
-
-        <!--<SeekBar
-            android:id="@+id/simpleSeekBar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:max="60"
-            app:layout_anchor="@+id/startTimerButton"
-            app:layout_anchorGravity="top|center" />-->
-
-        <FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center">
-
-            <com.agilie.circularpicker.ui.view.CircularPickerView
-                android:id="@+id/circularPicker"
-                android:layout_width="400dp"
-                android:layout_height="400dp"
-                android:layout_gravity="center"
-
-                />
-
-            <TextView
-                android:id="@+id/timerCountdown"
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fabButton"
+                style="@style/Widget.Design.FloatingActionButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/timer_countdown"
-                android:textSize="70sp" />
+                android:src="@drawable/ic_add_black_24dp"
+                app:backgroundTint="@color/colorAccent"
+                app:layout_anchor="@id/bottomBar" />
 
-            <me.zhanghai.android.materialprogressbar.MaterialProgressBar
-                android:id="@+id/progressCountdown"
-                style="@style/Widget.MaterialProgressBar.ProgressBar"
-                android:layout_width="240dp"
-                android:layout_height="240dp"
-                android:layout_gravity="center"
-                android:minWidth="306dp"
-                android:minHeight="360dp" />
-        </FrameLayout>
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/startTimerButton"
+                style="@style/Widget.Design.FloatingActionButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|top"
+                android:visibility="invisible"
+                app:backgroundTint="@color/colorAccent"
+                app:fabSize="mini"
+                app:layout_anchor="@+id/fabButton"
+                app:layout_anchorGravity="top|center"
+                app:srcCompat="@drawable/ic_play_arrow_white_24dp" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/pauseTimerButton"
+                style="@style/Widget.Design.FloatingActionButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|start"
+                android:visibility="invisible"
+                app:backgroundTint="@color/colorAccent"
+                app:fabSize="mini"
+                app:layout_anchor="@+id/fabButton"
+                app:layout_anchorGravity="start|top"
+                app:srcCompat="@drawable/ic_pause_white_24dp" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/resetTimerButton"
+                style="@style/Widget.Design.FloatingActionButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center"
+                android:visibility="invisible"
+                app:backgroundTint="@color/colorAccent"
+                app:fabSize="mini"
+                app:layout_anchor="@+id/fabButton"
+                app:layout_anchorGravity="end|top"
+                app:srcCompat="@drawable/ic_history_white_24dp" />
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center">
+
+                <com.agilie.circularpicker.ui.view.CircularPickerView
+                    android:id="@+id/circularPicker"
+                    android:layout_width="400dp"
+                    android:layout_height="400dp"
+                    android:layout_gravity="center"
+
+                    />
+
+                <TextView
+                    android:id="@+id/timerCountdown"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/timer_countdown"
+                    android:textSize="70sp" />
+
+                <me.zhanghai.android.materialprogressbar.MaterialProgressBar
+                    android:id="@+id/progressCountdown"
+                    style="@style/Widget.MaterialProgressBar.ProgressBar"
+                    android:layout_width="240dp"
+                    android:layout_height="240dp"
+                    android:layout_gravity="center"
+                    android:minWidth="306dp"
+                    android:minHeight="360dp" />
+            </FrameLayout>
 
 
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>-->
+
+        <fragment
+            android:id="@+id/navHostFragment"
+            android:name="androidx.navigation.fragment.NavHostFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:navGraph="@navigation/navigation" />
+
+        <com.google.android.material.navigation.NavigationView
+            android:id="@+id/navView"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            app:headerLayout="@layout/nav_header"
+            app:menu="@menu/navbar_menu" />
+    </androidx.drawerlayout.widget.DrawerLayout>
 </layout>

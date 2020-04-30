@@ -13,7 +13,12 @@ import android.view.Menu
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.Toast
+import androidx.databinding.DataBindingUtil
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.navigation.findNavController
+import androidx.navigation.ui.NavigationUI
 import com.agilie.circularpicker.presenter.CircularPickerContract
+import com.fpradipt.fokkuy.databinding.ActivityMainBinding
 import com.fpradipt.fokkuy.receiver.TimerExpiredReceiver
 import com.fpradipt.fokkuy.utils.NotificationService
 import com.fpradipt.fokkuy.utils.PrefUtils
@@ -26,30 +31,9 @@ import com.google.firebase.auth.GoogleAuthProvider
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 
-class MainActivity : AppCompatActivity(), View.OnClickListener {
+class MainActivity : AppCompatActivity() {
 
     companion object {
-        fun setAlarm(context: Context, nowSeconds: Long, secondsRemaining: Long): Long {
-            val wakeUpMs = (nowSeconds + secondsRemaining) * 1000
-            val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-            val alarmIntent = Intent(context, TimerExpiredReceiver::class.java)
-            val pendingIntent = PendingIntent.getBroadcast(context, 0, alarmIntent, 0)
-            alarmManager.setExact(AlarmManager.RTC_WAKEUP, wakeUpMs, pendingIntent)
-            PrefUtils.setAlarmTime(nowSeconds, context)
-            return wakeUpMs
-        }
-
-        fun removeAlarm(context: Context) {
-            val alarmIntent = Intent(context, TimerExpiredReceiver::class.java)
-            val pendingIntent = PendingIntent.getBroadcast(context, 0, alarmIntent, 0)
-            val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-            alarmManager.cancel(pendingIntent)
-            PrefUtils.setAlarmTime(0, context) // Reset time
-        }
-
-        val nowSeconds: Long
-            get() = Calendar.getInstance().timeInMillis / 1000
-
         const val GSO_ID = "GSO"
         const val RC_SIGN_IN: Int = 1
         fun getLaunchIntent(from: Context) = Intent(from, MainActivity::class.java).apply {
@@ -62,29 +46,34 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         const val ACTION_RESUME = "resume"
     }
 
-    private lateinit var timer: CountDownTimer
-    private var timerState = TimerState.Stopped
-    private var timerLengthSeconds: Long = 0L
-    private var secondsRemaining: Long = 0L
-    private var isOpen: Boolean = false
-
+    private lateinit var drawerLayout: DrawerLayout
     private lateinit var auth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+//        setContentView(R.layout.activity_main)
+
+        val binding = DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main)
+
+        drawerLayout = binding.drawerLayout
+
+        val navController = this.findNavController(R.id.navHostFragment)
+
+        NavigationUI.setupActionBarWithNavController(this,navController, drawerLayout)
+
+        NavigationUI.setupWithNavController(binding.navView, navController)
 
         // GSO
         configureGSO()
 
-        startTimerButton.visibility = View.INVISIBLE
+        /*startTimerButton.visibility = View.INVISIBLE
         pauseTimerButton.visibility = View.INVISIBLE
         resetTimerButton.visibility = View.INVISIBLE
 
         // Animation
-        /*val fabOpen = AnimationUtils.loadAnimation(this, R.anim.fab_open)
-        val fabClose = AnimationUtils.loadAnimation(this, R.anim.fab_close)*/
+        *//*val fabOpen = AnimationUtils.loadAnimation(this, R.anim.fab_open)
+        val fabClose = AnimationUtils.loadAnimation(this, R.anim.fab_close)*//*
         val fabRClockwise = AnimationUtils.loadAnimation(this, R.anim.rotate_clockwise)
         val fabRAntiClockwise = AnimationUtils.loadAnimation(this, R.anim.rotate_anticlockwise)
 
@@ -147,9 +136,15 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 //                    timerCountdown.setHintTextColor(Color.rgb(r, g, b))
                 }
             })
-        }
+        }*/
 //        gsoButton.setOnClickListener(this)
     }
+
+    override fun onSupportNavigateUp(): Boolean {
+        val navController = this.findNavController(R.id.navView)
+        return NavigationUI.navigateUp(navController, drawerLayout)
+    }
+
 
     override fun onStart() {
         super.onStart()
@@ -162,7 +157,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     }
 
-    override fun onClick(v: View?) {
+    /*override fun onClick(v: View?) {
         if (v != null) {
             when (v.id) {
                 R.id.startTimerButton -> {
@@ -184,7 +179,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 }
             }
         }
-    }
+    }*/
 
     private fun configureGSO() {
         // Configure Google Sign In
@@ -224,7 +219,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             }
     }
 
-    private fun resumeTimer() {
+   /* private fun resumeTimer() {
         timerState = PrefUtils.getTimerState(this)
 
         if (timerState === TimerState.Stopped)
@@ -241,7 +236,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         val alarmTime = PrefUtils.getAlarmTime(this)
         if (alarmTime > 0) {
             val afterPauseTime = nowSeconds - alarmTime
-            secondsRemaining -= nowSeconds - alarmTime
+            secondsRemaining -= afterPauseTime
         }
 
         if (secondsRemaining <= 0)
@@ -351,7 +346,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         progressCountdown.progress = 0
 
         val timerUiLength = PrefUtils.getTimerLength(this)
-        Toast.makeText(this, (timerUiLength).toString(), Toast.LENGTH_SHORT).show()
+//        Toast.makeText(this, (timerUiLength).toString(), Toast.LENGTH_SHORT).show()
 
         PrefUtils.setSecondsRemaining(timerUiLength * 60L, this)
         secondsRemaining = timerLengthSeconds
@@ -363,13 +358,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private fun startLogin() {
         val login = Intent(this@MainActivity, LoginActivity::class.java)
         startActivity(login)
-    }
+    }*/
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_timer, menu)
-
-        return true
-    }
+//    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+//        menuInflater.inflate(R.menu.menu_timer, menu)
+//
+//        return true
+//    }
 
 //    override fun onOptionsItemSelected(item: MenuItem): Boolean {
 //        return when(item.id) {
