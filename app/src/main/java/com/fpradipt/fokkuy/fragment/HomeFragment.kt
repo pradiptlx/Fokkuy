@@ -154,7 +154,6 @@ class HomeFragment : Fragment(), View.OnClickListener {
         if (v != null) {
             when (v.id) {
                 R.id.startTimerButton -> {
-                    Log.d("Cuk", v.id.toString())
                     timerState = TimerState.Running
                     timerLengthSeconds = PrefUtils.getTimerLength(requireActivity().applicationContext) * 60L
                     startTimer()
