@@ -16,4 +16,11 @@
         android:name="com.fpradipt.fokkuy.fragment.HomeFragment"
         android:label="Fokkuy"
         tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.fpradipt.fokkuy.fragment.LoginFragment"
+        android:label="Login Google"
+        tools:layout="@layout/fragment_login"
+        />
 </navigation>
