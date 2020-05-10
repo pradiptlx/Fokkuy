@@ -5,11 +5,11 @@
     android:id="@+id/navigation"
     app:startDestination="@id/homeApp">
 
-<!--    <fragment-->
-<!--        android:id="@+id/dashboardUser"-->
-<!--        android:name="com.fpradipt.fokkuy.fragment.DashboardFragment"-->
-<!--        android:label="Dashboard User"-->
-<!--        tools:layout="@layout/fragment_dashboard" />-->
+    <!--    <fragment-->
+    <!--        android:id="@+id/dashboardUser"-->
+    <!--        android:name="com.fpradipt.fokkuy.fragment.DashboardFragment"-->
+    <!--        android:label="Dashboard User"-->
+    <!--        tools:layout="@layout/fragment_dashboard" />-->
 
     <fragment
         android:id="@+id/homeApp"
@@ -21,6 +21,11 @@
         android:id="@+id/loginFragment"
         android:name="com.fpradipt.fokkuy.fragment.LoginFragment"
         android:label="Login Google"
-        tools:layout="@layout/fragment_login"
-        />
+        tools:layout="@layout/fragment_login" />
+
+    <fragment
+        android:id="@+id/usageFragment"
+        android:name="com.fpradipt.fokkuy.fragment.UsageFragment"
+        android:label="fragment_usage"
+        tools:layout="@layout/fragment_usage" />
 </navigation>

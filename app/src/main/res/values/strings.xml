@@ -41,4 +41,15 @@
     <string name="dashboard">Dashboard</string>
     <string name="about_text">This is about</string>
     <string name="timer">Timer</string>
+    <string name="clear">Clear History</string>
+    <string name="history_title">View History</string>
+
+    <!-- Output to TextView styled with a little HTML -->
+    <string name="title"><![CDATA[<h3>Usage Activity Log</h3>]]></string>
+    <string name="start_time"><![CDATA[<b>Start:</b>]]></string>
+    <string name="end_time"><![CDATA[<b>End:</b>]]></string>
+    <string name="duration"><![CDATA[<b>Duration:</b>]]></string>
+    <string name="created_at"><![CDATA[<b>Created At:</b>]]></string>
+    <string name="history_btn">History</string>
+
 </resources>

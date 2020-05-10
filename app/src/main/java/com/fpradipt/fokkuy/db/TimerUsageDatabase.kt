@@ -8,7 +8,7 @@ import com.fpradipt.fokkuy.model.UsageModel
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.internal.synchronized
 
-@Database(entities = [UsageModel::class], version = 1)
+@Database(entities = [UsageModel::class], version = 1, exportSchema = false)
 abstract class TimerUsageDatabase : RoomDatabase() {
     abstract val timerUsageDatabaseDao: TimerUsageDao
 

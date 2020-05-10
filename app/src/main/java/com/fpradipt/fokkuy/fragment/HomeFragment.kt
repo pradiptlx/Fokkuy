@@ -8,22 +8,28 @@ import android.graphics.Color
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.util.Log
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.findNavController
+import androidx.navigation.ui.NavigationUI
 import com.agilie.circularpicker.presenter.CircularPickerContract
 
 import com.fpradipt.fokkuy.R
 import com.fpradipt.fokkuy.TimerState
 import com.fpradipt.fokkuy.databinding.FragmentHomeBinding
+import com.fpradipt.fokkuy.db.TimerUsageDatabase
 import com.fpradipt.fokkuy.receiver.TimerExpiredReceiver
 import com.fpradipt.fokkuy.utils.NotificationService
 import com.fpradipt.fokkuy.utils.PrefUtils
+import com.fpradipt.fokkuy.view_model.UsageViewModel
+import com.fpradipt.fokkuy.view_model.UsageViewModelFactory
 import kotlinx.android.synthetic.main.fragment_home.*
+import kotlinx.coroutines.InternalCoroutinesApi
 import java.util.*
 
 /**
@@ -65,11 +71,22 @@ class HomeFragment : Fragment(), View.OnClickListener {
     private var isOpen: Boolean = false
 
     private lateinit var binding: FragmentHomeBinding
+
+    @InternalCoroutinesApi
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
+        setHasOptionsMenu(true)
+        val app = requireNotNull(this.activity).application
+        val dataSource = TimerUsageDatabase.getInstance(app).timerUsageDatabaseDao
+
+        val usageViewModelFactory = UsageViewModelFactory(dataSource, app)
+        val usageViewModel = ViewModelProviders.of(this, usageViewModelFactory)
+            .get(UsageViewModel::class.java)
+        binding.lifecycleOwner = this
+        binding.usageViewModel = usageViewModel
 
         binding.startTimerButton.visibility = View.INVISIBLE
         binding.pauseTimerButton.visibility = View.INVISIBLE
@@ -123,7 +140,7 @@ class HomeFragment : Fragment(), View.OnClickListener {
             valueChangedListener = (object : CircularPickerContract.Behavior.ValueChangedListener {
                 override fun onValueChanged(value: Int) {
                     Log.d("COUNT", value.toString())
-                    if (timerState === com.fpradipt.fokkuy.TimerState.Stopped) {
+                    if (timerState === TimerState.Stopped) {
                         binding.timerCountdown.text =
                             "${value.toString()}:00"
                         secondsRemaining = value * 60L
@@ -145,17 +162,27 @@ class HomeFragment : Fragment(), View.OnClickListener {
         return binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.navbar_menu, menu)
+    }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return NavigationUI.onNavDestinationSelected(
+            item,
+            requireView().findNavController()
+        )
+                || super.onOptionsItemSelected(item)
     }
 
     override fun onClick(v: View?) {
         if (v != null) {
             when (v.id) {
                 R.id.startTimerButton -> {
+                    binding.usageViewModel!!.onStartTimer()
                     timerState = TimerState.Running
-                    timerLengthSeconds = PrefUtils.getTimerLength(requireActivity().applicationContext) * 60L
+                    timerLengthSeconds =
+                        PrefUtils.getTimerLength(requireActivity().applicationContext) * 60L
                     startTimer()
                     updateButtons()
                 }
@@ -167,6 +194,7 @@ class HomeFragment : Fragment(), View.OnClickListener {
                 }
 
                 R.id.resetTimerButton -> {
+                    binding.usageViewModel!!.onStopTimer()
                     timer.cancel()
                     onTimerFinished()
                 }

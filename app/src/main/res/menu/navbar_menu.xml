@@ -6,4 +6,7 @@
     <item
         android:id="@+id/dashboardFragment"
         android:title="@string/dashboard" />
+    <item
+        android:id="@+id/usageFragment"
+        android:title="@string/history_title" />
 </menu>
