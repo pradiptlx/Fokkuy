@@ -148,7 +148,7 @@ class HomeFragment : Fragment(), View.OnClickListener {
                     } else
                         binding.timerCountdown.text =
                             "${(timerLengthSeconds / 60).toString()}:00"
-                    PrefUtils.setTimerLength(value, context)
+                    PrefUtils.setTimerLength(value, requireContext())
 
                 }
             })
@@ -179,7 +179,6 @@ class HomeFragment : Fragment(), View.OnClickListener {
         if (v != null) {
             when (v.id) {
                 R.id.startTimerButton -> {
-                    binding.usageViewModel!!.onStartTimer()
                     timerState = TimerState.Running
                     timerLengthSeconds =
                         PrefUtils.getTimerLength(requireActivity().applicationContext) * 60L
@@ -194,7 +193,6 @@ class HomeFragment : Fragment(), View.OnClickListener {
                 }
 
                 R.id.resetTimerButton -> {
-                    binding.usageViewModel!!.onStopTimer()
                     timer.cancel()
                     onTimerFinished()
                 }
@@ -233,6 +231,7 @@ class HomeFragment : Fragment(), View.OnClickListener {
 
     private fun startTimer() {
         timerState = TimerState.Running
+        binding.usageViewModel!!.onStartTimer()
 
         timer = object : CountDownTimer(secondsRemaining * 1000, 1000) {
             override fun onFinish() {
@@ -345,6 +344,7 @@ class HomeFragment : Fragment(), View.OnClickListener {
 
         updateButtons()
         updateCountdownUI()
+        binding.usageViewModel!!.onStopTimer()
     }
 
 }

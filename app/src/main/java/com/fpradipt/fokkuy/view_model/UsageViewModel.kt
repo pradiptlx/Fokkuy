@@ -10,6 +10,9 @@ import com.fpradipt.fokkuy.db.TimerUsageDao
 import com.fpradipt.fokkuy.model.UsageModel
 import com.fpradipt.fokkuy.utils.formatLog
 import kotlinx.coroutines.*
+import java.time.Instant
+import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 class UsageViewModel(
@@ -66,7 +69,10 @@ class UsageViewModel(
         uiScope.launch {
             val oldLog = logUsage.value ?: return@launch
             oldLog.endTimer = System.currentTimeMillis()
-            oldLog.createdAt = Date().toString()
+            oldLog.createdAt = DateTimeFormatter
+                .ofPattern("dd-MM-yyyy HH:mm:ss")
+                .withZone(ZoneOffset.systemDefault())
+                .format(Instant.now())
             updateHist(oldLog)
             Log.d("STOP", oldLog.toString())
         }

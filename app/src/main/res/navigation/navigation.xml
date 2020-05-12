@@ -26,6 +26,6 @@
     <fragment
         android:id="@+id/usageFragment"
         android:name="com.fpradipt.fokkuy.fragment.UsageFragment"
-        android:label="fragment_usage"
+        android:label="Usage Activity Log"
         tools:layout="@layout/fragment_usage" />
 </navigation>
