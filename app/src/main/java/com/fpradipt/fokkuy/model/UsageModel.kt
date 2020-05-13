@@ -16,7 +16,7 @@ data class UsageModel(
     var endTimer: Long = 0L,
 
     @ColumnInfo(name = "duration_timer")
-    val duration: Int = 0,
+    var duration: Int = 0,
 
     @ColumnInfo(name = "created_at")
     var createdAt: String = "",

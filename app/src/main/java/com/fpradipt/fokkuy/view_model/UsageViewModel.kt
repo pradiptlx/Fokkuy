@@ -69,6 +69,7 @@ class UsageViewModel(
         uiScope.launch {
             val oldLog = logUsage.value ?: return@launch
             oldLog.endTimer = System.currentTimeMillis()
+            oldLog.duration = ((oldLog.endTimer - oldLog.startTimer) /1000).toInt()
             oldLog.createdAt = DateTimeFormatter
                 .ofPattern("dd-MM-yyyy HH:mm:ss")
                 .withZone(ZoneOffset.systemDefault())

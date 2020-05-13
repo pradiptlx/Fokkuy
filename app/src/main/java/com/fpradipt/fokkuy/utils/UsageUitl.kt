@@ -40,6 +40,7 @@ fun formatLog(log: List<UsageModel>, resources: Resources): Spanned {
             if (it.endTimer != it.startTimer) {
                 append(resources.getString(R.string.end_time))
                 append("\t${convertLongToDateString(it.endTimer)}<br>")
+                append("<b>Duration: </b> ${it.duration} seconds<br>")
                 append("<b>Created At: </b>${it.createdAt}<br><br>")
             }
         }
