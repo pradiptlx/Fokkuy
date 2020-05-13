@@ -21,6 +21,9 @@ interface TimerUsageDao {
     @Query("SELECT * FROM usage_timer_table ORDER BY created_at DESC")
     fun getHistory(): LiveData<List<UsageModel>>
 
+    @Query("SELECT * FROM usage_timer_table ORDER BY created_at DESC")
+    fun getAll(): List<UsageModel>
+
     @Query("SELECT * FROM usage_timer_table ORDER BY timerId DESC LIMIT 1")
     fun getCurrent(): UsageModel?
 

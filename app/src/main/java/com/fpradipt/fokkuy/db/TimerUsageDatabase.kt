@@ -28,6 +28,7 @@ abstract class TimerUsageDatabase : RoomDatabase() {
                         "usage_timer_table"
                     )
                         .fallbackToDestructiveMigration()
+                        .allowMainThreadQueries()
                         .build()
 
                     INSTANCE = instance

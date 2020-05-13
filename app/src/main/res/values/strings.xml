@@ -51,5 +51,6 @@
     <string name="duration"><![CDATA[<b>Duration:</b>]]></string>
     <string name="created_at"><![CDATA[<b>Created At:</b>]]></string>
     <string name="history_btn">History</string>
+    <string name="text_usage_plot">Activity Usage Plot</string>
 
 </resources>

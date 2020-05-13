@@ -78,7 +78,6 @@ class HomeFragment : Fragment(), View.OnClickListener {
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
-        setHasOptionsMenu(true)
         val app = requireNotNull(this.activity).application
         val dataSource = TimerUsageDatabase.getInstance(app).timerUsageDatabaseDao
 

@@ -2,13 +2,12 @@ package com.fpradipt.fokkuy.utils
 
 import android.annotation.SuppressLint
 import android.content.res.Resources
-import android.os.Build
 import android.text.Html
 import android.text.Spanned
 import android.util.Log
-import androidx.core.text.HtmlCompat
 import com.fpradipt.fokkuy.R
 import com.fpradipt.fokkuy.model.UsageModel
+import com.github.mikephil.charting.data.BarEntry
 import java.text.SimpleDateFormat
 
 
@@ -46,4 +45,15 @@ fun formatLog(log: List<UsageModel>, resources: Resources): Spanned {
         }
     }
     return Html.fromHtml(sb.toString(), Html.FROM_HTML_MODE_LEGACY)
+}
+
+fun formatDataChart(entries: List<UsageModel>): ArrayList<BarEntry> {
+    Log.d("FORMAT DATA", entries.toString())
+    val entry = ArrayList<BarEntry>()
+
+    entries.forEachIndexed { index, usageModel ->
+        entry.add(BarEntry(index.toFloat(), usageModel.duration.toFloat()))
+    }
+
+    return entry
 }
