@@ -9,7 +9,12 @@
         android:id="@+id/dashboardFragment"
         android:name="com.fpradipt.fokkuy.fragment.DashboardFragment"
         android:label="Dashboard User"
-        tools:layout="@layout/fragment_dashboard" />
+        tools:layout="@layout/fragment_dashboard" >
+        <action
+            android:id="@+id/action_dashboardFragment_to_homeApp"
+            app:destination="@id/homeApp"
+            app:popUpTo="@id/homeApp" />
+    </fragment>
 
     <fragment
         android:id="@+id/homeApp"

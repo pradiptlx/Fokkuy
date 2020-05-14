@@ -8,8 +8,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
@@ -26,12 +28,13 @@ import kotlinx.coroutines.InternalCoroutinesApi
 class DashboardFragment : Fragment() {
     private lateinit var viewModel: DashboardViewModel
     private lateinit var auth: FirebaseAuth
+    private lateinit var binding: FragmentDashboardBinding
     @InternalCoroutinesApi
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding = DataBindingUtil.inflate<FragmentDashboardBinding>(inflater, R.layout.fragment_dashboard, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_dashboard, container, false)
         binding.lifecycleOwner = this
 
         checkAuth()
@@ -49,14 +52,9 @@ class DashboardFragment : Fragment() {
         chart.setFitBars(true)
         chart.invalidate()
 
-        Glide.with(this)
-            .load(auth.currentUser?.photoUrl)
-            .fitCenter()
-            .into(binding.imageView);
-
-        binding.emailUser.text = auth.currentUser?.email
-        binding.fullname.text = auth.currentUser?.displayName
-
+        binding.signOutButton.setOnClickListener {
+            onSignOut()
+        }
         Log.d("AUTH", auth.currentUser?.photoUrl.toString())
 
         return binding.root
@@ -66,6 +64,10 @@ class DashboardFragment : Fragment() {
         auth = FirebaseAuth.getInstance()
 
         if(auth.currentUser == null){
+            binding.signOutButton.visibility = View.GONE
+            binding.fullname.text = "Your Name"
+            binding.emailUser.text = "Your Email"
+
             val providers = arrayListOf(
                 AuthUI.IdpConfig.EmailBuilder().build(),
                 AuthUI.IdpConfig.GoogleBuilder().build()
@@ -75,7 +77,23 @@ class DashboardFragment : Fragment() {
                     providers
                 ).build(), SIGN_IN_RESULT_CODE
             )
+        }else{
+            Glide.with(this)
+                .load(auth.currentUser?.photoUrl)
+                .fitCenter()
+                .into(binding.imageView);
+
+            binding.emailUser.text = auth.currentUser?.email
+            binding.fullname.text = auth.currentUser?.displayName
         }
+    }
+
+    private fun onSignOut(){
+        auth.signOut()
+
+        this.findNavController().navigate(R.id.action_dashboardFragment_to_homeApp)
+
+        Toast.makeText(context, "Successfully sign out", Toast.LENGTH_SHORT).show()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -85,6 +103,14 @@ class DashboardFragment : Fragment() {
             Log.d("EMAIL", response!!.email.toString())
             Log.d("RESPONSE", response.toString())
             if (resultCode == Activity.RESULT_OK) {
+                Glide.with(this)
+                    .load(auth.currentUser?.photoUrl)
+                    .fitCenter()
+                    .into(binding.imageView);
+
+                binding.emailUser.text = auth.currentUser?.email
+                binding.fullname.text = auth.currentUser?.displayName
+                binding.signOutButton.visibility = View.VISIBLE
                 // User successfully signed in
                 Log.i(
                     TAG,
@@ -94,7 +120,8 @@ class DashboardFragment : Fragment() {
                 // Sign in failed. If response is null the user canceled the
                 // sign-in flow using the back button. Otherwise check
                 // response.getError().getErrorCode() and handle the error.
-                Log.i(TAG, "Sign in unsuccessful ${response?.error?.errorCode}")
+                Log.i(TAG, "Sign in unsuccessful ${response.error?.errorCode}")
+                this.findNavController().navigate(R.id.action_dashboardFragment_to_homeApp)
             }
         }
     }

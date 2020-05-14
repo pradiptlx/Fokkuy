@@ -64,7 +64,7 @@
             app:layout_constraintVertical_bias="0.82" />
 
         <TextView
-            android:id="@+id/textView3"
+            android:id="@+id/plotText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/text_usage_plot"
@@ -76,6 +76,17 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/emailUser"
             app:layout_constraintVertical_bias="0.735" />
+
+        <Button
+            app:backgroundTint="@android:color/holo_red_dark"
+            android:id="@+id/signOutButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/sign_out"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/chart"
+            app:layout_constraintVertical_bias="1.0"
+            tools:layout_editor_absoluteX="16dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
