@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
+import com.bumptech.glide.Glide
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
 
@@ -48,8 +49,15 @@ class DashboardFragment : Fragment() {
         chart.setFitBars(true)
         chart.invalidate()
 
+        Glide.with(this)
+            .load(auth.currentUser?.photoUrl)
+            .fitCenter()
+            .into(binding.imageView);
+
         binding.emailUser.text = auth.currentUser?.email
         binding.fullname.text = auth.currentUser?.displayName
+
+        Log.d("AUTH", auth.currentUser?.photoUrl.toString())
 
         return binding.root
     }

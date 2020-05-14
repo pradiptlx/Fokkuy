@@ -23,18 +23,20 @@
             android:id="@+id/imageView"
             android:layout_width="82dp"
             android:layout_height="85dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:contentDescription="@string/desc_profile_picture"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:src="@tools:sample/avatars"
-            android:contentDescription="@string/desc_profile_picture" />
+            tools:src="@tools:sample/avatars" />
 
         <TextView
             android:id="@+id/fullname"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="235dp"
+            android:layout_height="45dp"
             android:layout_marginTop="24dp"
             android:text="@string/your_name"
-            android:textSize="30sp"
+            android:textSize="20sp"
             app:layout_constraintEnd_toStartOf="@+id/imageView"
             app:layout_constraintHorizontal_bias="0.062"
             app:layout_constraintStart_toStartOf="parent"
@@ -44,10 +46,9 @@
             android:id="@+id/emailUser"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="28dp"
             android:text="@string/your_email"
             app:layout_constraintEnd_toStartOf="@+id/imageView"
-            app:layout_constraintHorizontal_bias="0.062"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/fullname" />
 

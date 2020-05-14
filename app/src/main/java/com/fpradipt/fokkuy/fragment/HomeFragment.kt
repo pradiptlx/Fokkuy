@@ -67,8 +67,6 @@ class HomeFragment : Fragment(), View.OnClickListener {
         const val ACTION_PAUSE = "pause"
         const val ACTION_RESUME = "resume"
 
-        const val TAG = "HOME"
-        const val SIGN_IN_RESULT_CODE = 1001
     }
 
     private lateinit var timer: CountDownTimer
@@ -145,7 +143,7 @@ class HomeFragment : Fragment(), View.OnClickListener {
 
             valueChangedListener = (object : CircularPickerContract.Behavior.ValueChangedListener {
                 override fun onValueChanged(value: Int) {
-                    Log.d("COUNT", value.toString())
+//                    Log.d("COUNT", value.toString())
                     if (timerState === TimerState.Stopped) {
                         binding.timerCountdown.text =
                             "${value.toString()}:00"
@@ -297,14 +295,14 @@ class HomeFragment : Fragment(), View.OnClickListener {
 
     private fun updateCountdownUI() {
         val minutesUntilFinished = secondsRemaining / 60 // Convert to minute
-        Log.d("minutesUntilFinished", minutesUntilFinished.toString())
-        Log.d("timerLengthSeconds", timerLengthSeconds.toString())
+//        Log.d("minutesUntilFinished", minutesUntilFinished.toString())
+//        Log.d("timerLengthSeconds", timerLengthSeconds.toString())
         val secondsInMinuteUntilFinished =
             secondsRemaining - minutesUntilFinished * 60 // If minutes > 0, secondsInMinutesUntilFinished !== secondsRemaining
         val secondsStr = secondsInMinuteUntilFinished.toString()
         timerCountdown.text =
             "$minutesUntilFinished:${if (secondsStr.length == 2) secondsStr else "0" + secondsStr}"
-        Log.d("countdown", (timerLengthSeconds - secondsRemaining).toString())
+//        Log.d("countdown", (timerLengthSeconds - secondsRemaining).toString())
         progressCountdown.progress = (timerLengthSeconds - secondsRemaining).toInt()
         circularPicker.apply {
             currentValue = PrefUtils.getTimerLength(context)
@@ -351,44 +349,6 @@ class HomeFragment : Fragment(), View.OnClickListener {
         updateButtons()
         updateCountdownUI()
         binding.usageViewModel!!.onStopTimer()
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == SIGN_IN_RESULT_CODE) {
-            val response = IdpResponse.fromResultIntent(data)
-            if (resultCode == Activity.RESULT_OK) {
-                // User successfully signed in
-                Log.i(
-                    TAG,
-                    "Successfully signed in user ${FirebaseAuth.getInstance().currentUser?.displayName}!"
-                )
-            } else {
-                // Sign in failed. If response is null the user canceled the
-                // sign-in flow using the back button. Otherwise check
-                // response.getError().getErrorCode() and handle the error.
-                Log.i(TAG, "Sign in unsuccessful ${response?.error?.errorCode}")
-            }
-        }
-    }
-    private fun launchSignInFlow() {
-        // Give users the option to sign in / register with their email
-        // If users choose to register with their email,
-        // they will need to create a password as well
-        val providers = arrayListOf(
-            AuthUI.IdpConfig.EmailBuilder().build(),
-            AuthUI.IdpConfig.GoogleBuilder().build()
-
-        )
-
-        // Create and launch sign-in intent.
-        // We listen to the response of this activity with the
-        // SIGN_IN_RESULT_CODE code
-        startActivityForResult(
-            AuthUI.getInstance().createSignInIntentBuilder().setAvailableProviders(
-                providers
-            ).build(), SIGN_IN_RESULT_CODE
-        )
     }
 
 }
