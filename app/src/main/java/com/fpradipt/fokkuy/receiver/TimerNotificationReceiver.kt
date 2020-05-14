@@ -54,6 +54,7 @@ class TimerNotificationReceiver : BroadcastReceiver() {
                         HomeFragment.nowSeconds,
                         secondsRemaining
                     )
+                PrefUtils.setTimerState(TimerState.Running, context)
                 NotificationService.showTimerRunning(context, wakeUpTime)
             }
         }

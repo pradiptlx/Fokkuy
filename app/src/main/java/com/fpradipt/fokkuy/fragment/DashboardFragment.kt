@@ -66,6 +66,7 @@ class DashboardFragment : Fragment() {
             binding.signOutButton.visibility = View.GONE
             binding.fullname.text = "Your Name"
             binding.emailUser.text = "Your Email"
+            binding.chart.visibility = View.GONE
 
             val providers = arrayListOf(
                 AuthUI.IdpConfig.EmailBuilder().build(),
@@ -81,7 +82,6 @@ class DashboardFragment : Fragment() {
                 .load(auth.currentUser?.photoUrl)
                 .fitCenter()
                 .into(binding.imageView);
-
             binding.emailUser.text = auth.currentUser?.email
             binding.fullname.text = auth.currentUser?.displayName
         }
@@ -106,7 +106,8 @@ class DashboardFragment : Fragment() {
                     .load(auth.currentUser?.photoUrl)
                     .fitCenter()
                     .into(binding.imageView);
-
+                binding.plotText.visibility = View.VISIBLE
+                binding.chart.visibility = View.VISIBLE
                 binding.emailUser.text = auth.currentUser?.email
                 binding.fullname.text = auth.currentUser?.displayName
                 binding.signOutButton.visibility = View.VISIBLE

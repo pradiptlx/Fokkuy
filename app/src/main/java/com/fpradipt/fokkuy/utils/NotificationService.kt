@@ -69,20 +69,20 @@ class NotificationService {
             val resumePendingIntent =
                 PendingIntent.getBroadcast(context, 0, intentResume, PendingIntent.FLAG_UPDATE_CURRENT)
 
-            val notifBuilder = getNotificationBuilder(context, CHANNEL_ID, false)
+            val notifBuilder = getNotificationBuilder(context, CHANNEL_ID, true)
             notifBuilder.setContentTitle("Fokkuy is paused")
                 .setContentText("Paused")
                 .setContentIntent(getIntentStack(context, MainActivity::class.java))
                 .addAction(R.drawable.ic_play_arrow_white_24dp, "Resume", resumePendingIntent)
                 .addAction(R.drawable.ic_history_white_24dp, "Reset", stopPendingIntent)
             val notifManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            notifManager.createNotificationChannel(CHANNEL_ID, CHANNEL_NAME, false)
+            notifManager.createNotificationChannel(CHANNEL_ID, CHANNEL_NAME, true)
             notifManager.notify(TIMER_ID, notifBuilder.build())
         }
 
         private fun NotificationManager.createNotificationChannel(channelId: String, channelName: String, playSound: Boolean) {
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-                val importance = if(playSound) NotificationManager.IMPORTANCE_DEFAULT else NotificationManager.IMPORTANCE_LOW
+                val importance = if(playSound) NotificationManager.IMPORTANCE_HIGH else NotificationManager.IMPORTANCE_LOW
                 val notifChannel = NotificationChannel(channelId, channelName, importance)
                 notifChannel.lightColor = Color.WHITE
                 this.createNotificationChannel(notifChannel)

@@ -13,7 +13,7 @@
         <action
             android:id="@+id/action_dashboardFragment_to_homeApp"
             app:destination="@id/homeApp"
-            app:popUpTo="@id/homeApp" />
+            app:popUpTo="@id/dashboardFragment" />
     </fragment>
 
     <fragment

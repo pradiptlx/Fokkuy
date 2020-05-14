@@ -156,6 +156,7 @@ class HomeFragment : Fragment(), View.OnClickListener {
             colorChangedListener = (object : CircularPickerContract.Behavior.ColorChangedListener {
                 override fun onColorChanged(r: Int, g: Int, b: Int) {
 //                    timerCountdown.setHintTextColor(Color.rgb(r, g, b))
+                    binding.layout.setBackgroundColor(Color.rgb(r, g, b))
                 }
             })
         }
@@ -219,7 +220,7 @@ class HomeFragment : Fragment(), View.OnClickListener {
         Log.d("DEX_resumeTimer", secondsRemaining.toString())
         Log.d("DEX_STATE", timerState.toString())
         val alarmTime = PrefUtils.getAlarmTime(requireContext().applicationContext)
-        Log.d("DEX_ALARMresume", (alarmTime/1000).toString())
+        Log.d("DEX_ALARMresume", (alarmTime / 1000).toString())
         if (alarmTime > 0) {
             val afterPauseTime = nowSeconds - alarmTime
             Log.d("DEX_afterPause", afterPauseTime.toString())
@@ -278,7 +279,7 @@ class HomeFragment : Fragment(), View.OnClickListener {
             timer.cancel()
             val wakeUpTime =
                 setAlarm(requireContext().applicationContext, nowSeconds, secondsRemaining)
-            Log.d("DEX_WAKEUP", (wakeUpTime/1000).toString())
+            Log.d("DEX_WAKEUP", (wakeUpTime / 1000).toString())
             NotificationService.showTimerRunning(requireContext().applicationContext, wakeUpTime)
         } else if (timerState === TimerState.Paused) {
             NotificationService.showTimerPause(requireContext().applicationContext)
