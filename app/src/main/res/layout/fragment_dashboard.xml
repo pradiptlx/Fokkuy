@@ -33,7 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:text="TextView"
+            android:text="@string/your_name"
             android:textSize="30sp"
             app:layout_constraintEnd_toStartOf="@+id/imageView"
             app:layout_constraintHorizontal_bias="0.062"
@@ -45,7 +45,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="28dp"
-            android:text="TextView"
+            android:text="@string/your_email"
             app:layout_constraintEnd_toStartOf="@+id/imageView"
             app:layout_constraintHorizontal_bias="0.062"
             app:layout_constraintStart_toStartOf="parent"
@@ -70,9 +70,11 @@
             android:textColor="@color/grey_500"
             android:textSize="20sp"
             app:layout_constraintBottom_toTopOf="@+id/chart"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.066"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/emailUser"
-            app:layout_constraintVertical_bias="0.762"
-            tools:layout_editor_absoluteX="-7dp" />
+            app:layout_constraintVertical_bias="0.735" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

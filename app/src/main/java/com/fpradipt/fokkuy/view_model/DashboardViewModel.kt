@@ -66,8 +66,7 @@ class DashboardViewModel(
         return data
     }
 
-    fun getXLabel(): Array<Any> {
-        Log.d("ARRAYLIST", arrayOf('1', '2', '3').toString())
+    private fun getXLabel(): Array<Any> {
         return xAxisLabel.toArray()
     }
 

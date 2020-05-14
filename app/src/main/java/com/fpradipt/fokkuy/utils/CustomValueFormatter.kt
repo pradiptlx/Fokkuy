@@ -17,6 +17,6 @@ class CustomValueFormatter(
     }
 
     override fun getAxisLabel(value: Float, axis: AxisBase?): String {
-        return days.getOrNull(value.toInt()) ?: value.toString()
+        return xLabel.toString()
     }
 }
