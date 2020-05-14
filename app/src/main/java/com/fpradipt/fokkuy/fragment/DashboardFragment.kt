@@ -10,7 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.firebase.ui.auth.AuthUI
@@ -19,7 +19,6 @@ import com.firebase.ui.auth.IdpResponse
 import com.fpradipt.fokkuy.R
 import com.fpradipt.fokkuy.databinding.FragmentDashboardBinding
 import com.fpradipt.fokkuy.db.TimerUsageDatabase
-import com.fpradipt.fokkuy.utils.CustomValueFormatter
 import com.fpradipt.fokkuy.view_model.DashboardViewModel
 import com.fpradipt.fokkuy.view_model.DashboardViewModelFactory
 import com.google.firebase.auth.FirebaseAuth
@@ -42,7 +41,7 @@ class DashboardFragment : Fragment() {
         val dataSource = TimerUsageDatabase.getInstance(application).timerUsageDatabaseDao
         val viewModelFactory = DashboardViewModelFactory(dataSource, application)
 
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(DashboardViewModel::class.java)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(DashboardViewModel::class.java)
         binding.dashboardViewModel = viewModel
 
         val chart = binding.chart
@@ -122,6 +121,7 @@ class DashboardFragment : Fragment() {
                 // response.getError().getErrorCode() and handle the error.
                 Log.i(TAG, "Sign in unsuccessful ${response.error?.errorCode}")
                 this.findNavController().navigate(R.id.action_dashboardFragment_to_homeApp)
+                Toast.makeText(context, "Try Again", Toast.LENGTH_SHORT).show()
             }
         }
     }

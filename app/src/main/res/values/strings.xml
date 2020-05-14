@@ -19,7 +19,6 @@
     <string name="sign_out">Sign Out</string>
     <string name="signed_out">Signed Out</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="login_start">Login Start</string>
     <string name="title_activity_navigation_drawer_side">NavigationDrawerSide</string>
@@ -54,5 +53,10 @@
     <string name="text_usage_plot">Activity Usage Plot</string>
     <string name="your_name">Your name</string>
     <string name="your_email">Your Email</string>
+    <string name="about_me">
+        Akwila Feliciano P 05111740000181.
+        Aplikasi bernama Fokkuy yaitu aplikasi untuk timer dengan log dan chart.
+        Dibuat dengan bahasa Kotlin dan Coroutine untuk transaksi DB.
+    </string>
 
 </resources>

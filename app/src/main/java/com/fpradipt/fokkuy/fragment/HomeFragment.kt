@@ -14,13 +14,10 @@ import androidx.fragment.app.Fragment
 import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
-import androidx.drawerlayout.widget.DrawerLayout
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
 import com.agilie.circularpicker.presenter.CircularPickerContract
-import com.firebase.ui.auth.AuthUI
-import com.firebase.ui.auth.IdpResponse
 
 import com.fpradipt.fokkuy.R
 import com.fpradipt.fokkuy.TimerState
@@ -87,7 +84,7 @@ class HomeFragment : Fragment(), View.OnClickListener {
         val dataSource = TimerUsageDatabase.getInstance(app).timerUsageDatabaseDao
 
         val usageViewModelFactory = UsageViewModelFactory(dataSource, app)
-        val usageViewModel = ViewModelProviders.of(this, usageViewModelFactory)
+        val usageViewModel = ViewModelProvider(this, usageViewModelFactory)
             .get(UsageViewModel::class.java)
         binding.lifecycleOwner = this
         binding.usageViewModel = usageViewModel
@@ -205,12 +202,13 @@ class HomeFragment : Fragment(), View.OnClickListener {
     }
 
     private fun resumeTimer() {
-        timerState = context?.let { PrefUtils.getTimerState(it) }!!
+        timerState = PrefUtils.getTimerState(requireContext())
 
         if (timerState === TimerState.Stopped)
             setNewTimerLength()
         else
             setPreviousTimerLength()
+        Log.d("DEX_PREV", timerLengthSeconds.toString())
 
         secondsRemaining =
             if (timerState === TimerState.Running || timerState === TimerState.Paused)
@@ -218,11 +216,16 @@ class HomeFragment : Fragment(), View.OnClickListener {
             else
                 timerLengthSeconds
 
+        Log.d("DEX_resumeTimer", secondsRemaining.toString())
+        Log.d("DEX_STATE", timerState.toString())
         val alarmTime = PrefUtils.getAlarmTime(requireContext().applicationContext)
+        Log.d("DEX_ALARMresume", (alarmTime/1000).toString())
         if (alarmTime > 0) {
             val afterPauseTime = nowSeconds - alarmTime
+            Log.d("DEX_afterPause", afterPauseTime.toString())
             secondsRemaining -= afterPauseTime
         }
+        Log.d("DEX_secondsremaining", secondsRemaining.toString())
 
         if (secondsRemaining <= 0)
             onTimerFinished()
@@ -270,20 +273,24 @@ class HomeFragment : Fragment(), View.OnClickListener {
     override fun onPause() {
         super.onPause()
 
+        Log.d("DEX_PAUSE", secondsRemaining.toString())
         if (timerState === TimerState.Running) {
             timer.cancel()
             val wakeUpTime =
                 setAlarm(requireContext().applicationContext, nowSeconds, secondsRemaining)
+            Log.d("DEX_WAKEUP", (wakeUpTime/1000).toString())
             NotificationService.showTimerRunning(requireContext().applicationContext, wakeUpTime)
         } else if (timerState === TimerState.Paused) {
             NotificationService.showTimerPause(requireContext().applicationContext)
         }
 
+//        Log.d("DEX_onPauseTIMERLENGTH", timerLengthSeconds.toString())
         PrefUtils.setPreviousTimerLengthSeconds(
             timerLengthSeconds,
             requireContext().applicationContext
         )
         PrefUtils.setSecondsRemaining(secondsRemaining, requireContext().applicationContext)
+        Log.d("DEX_PAUSESTATE", timerState.toString())
         PrefUtils.setTimerState(timerState, requireContext().applicationContext)
     }
 
@@ -300,9 +307,11 @@ class HomeFragment : Fragment(), View.OnClickListener {
         val secondsInMinuteUntilFinished =
             secondsRemaining - minutesUntilFinished * 60 // If minutes > 0, secondsInMinutesUntilFinished !== secondsRemaining
         val secondsStr = secondsInMinuteUntilFinished.toString()
+        Log.d("DEX_secondsStr", secondsStr)
+//        Log.d("DEX_timerLengthS", timerLengthSeconds.toString())
         timerCountdown.text =
             "$minutesUntilFinished:${if (secondsStr.length == 2) secondsStr else "0" + secondsStr}"
-//        Log.d("countdown", (timerLengthSeconds - secondsRemaining).toString())
+        Log.d("DEX_countdown", (timerLengthSeconds - secondsRemaining).toString())
         progressCountdown.progress = (timerLengthSeconds - secondsRemaining).toInt()
         circularPicker.apply {
             currentValue = PrefUtils.getTimerLength(context)

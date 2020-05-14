@@ -44,7 +44,7 @@ class PrefUtils {
         fun setTimerState(state: TimerState, context:Context) {
             val editor = PreferenceManager.getDefaultSharedPreferences(context).edit()
             val pos = state.ordinal
-            editor.putInt(PREVIOUS_TIMER_LENGTH_SECONDS_ID, pos)
+            editor.putInt(TIMER_STATE_ID, pos)
             editor.apply()
         }
 
