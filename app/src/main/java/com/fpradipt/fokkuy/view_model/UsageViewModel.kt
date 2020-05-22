@@ -61,6 +61,10 @@ class UsageViewModel(
                 }
 
                 for (doc in docs!!) {
+                    if (!doc.exists()) {
+                        logFirebaseLvData.value = null
+                        return@addSnapshotListener
+                    }
 //                    Log.d("DOCS", doc.toObject(UsageFirestoreModel::class.java).toString())
 //                    val docObject = doc.toObject(UsageFirestoreModel::class.java)
                     val model = UsageFirestoreModel()
@@ -104,6 +108,8 @@ class UsageViewModel(
     fun onClear() {
         uiScope.launch {
             clearHist()
+            firestore.document("users/${auth.currentUser!!.uid}")
+                .delete()
             Log.d("Clear", logUsage.value.toString())
         }
     }
