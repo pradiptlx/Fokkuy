@@ -46,7 +46,7 @@
                 android:layout_marginStart="@dimen/margin"
                 android:layout_marginTop="@dimen/margin"
                 android:layout_marginEnd="@dimen/margin"
-                android:text="@{UsageViewModel.pLogFirebase}" />
+                android:text="@{UsageViewModel.parsedHist}" />
         </ScrollView>
 
         <TextView

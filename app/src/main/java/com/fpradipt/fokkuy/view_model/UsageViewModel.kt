@@ -12,7 +12,9 @@ import com.fpradipt.fokkuy.model.UsageModel
 import com.fpradipt.fokkuy.utils.formatLog
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.*
@@ -47,24 +49,27 @@ class UsageViewModel(
     init {
         initTimer()
         initFirestore()
-        Log.d("LOG", _histories.toString())
+        Log.d("LOG", pLogFirebase.toString())
     }
 
-    private fun initFirestore(): MutableLiveData<List<UsageFirestoreModel>> {
+    private fun initFirestore(): LiveData<List<UsageFirestoreModel>> {
         val listFirestoreModel = mutableListOf<UsageFirestoreModel>()
+
         firestore.collection("users/${auth.currentUser!!.uid}/${collection}")
-            .get()
-            .addOnSuccessListener { docs ->
-                for (doc in docs) {
+            .addSnapshotListener { docs, e ->
+                if (e != null) {
+                    logFirebaseLvData.value = null
+                    return@addSnapshotListener
+                }
+
+                for (doc in docs!!) {
                     Log.d("DOCS", doc.toObject(UsageFirestoreModel::class.java).toString())
                     val docObject = doc.toObject(UsageFirestoreModel::class.java)
                     listFirestoreModel.add(docObject)
                 }
-            }.addOnFailureListener {
-                Log.d("DOCS", "FAILED", it)
-            }
-        logFirebaseLvData.value = listFirestoreModel
+                logFirebaseLvData.value = listFirestoreModel
 
+            }
         return logFirebaseLvData
     }
 
