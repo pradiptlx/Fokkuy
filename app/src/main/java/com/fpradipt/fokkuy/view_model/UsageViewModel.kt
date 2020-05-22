@@ -11,6 +11,7 @@ import com.fpradipt.fokkuy.model.UsageFirestoreModel
 import com.fpradipt.fokkuy.model.UsageModel
 import com.fpradipt.fokkuy.utils.formatLog
 import com.google.android.gms.tasks.OnFailureListener
+import com.google.common.math.LongMath
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.FirebaseFirestore
@@ -33,13 +34,11 @@ class UsageViewModel(
     private val _histories = database.getHistory()
     private var logUsage = MutableLiveData<UsageModel?>()
     var logFirebaseLvData = MutableLiveData<List<UsageFirestoreModel>>()
-    private var logFirebase = initFirestore()
-    val pLogFirebase: LiveData<List<UsageFirestoreModel>>
-        get() = logFirebase
+    var logFirebase = initFirestore()
     val histories: LiveData<List<UsageModel>>
         get() = _histories
 
-    val parsedHist = Transformations.map(pLogFirebase) { history ->
+    val parsedHist = Transformations.map(logFirebase) { history ->
         formatLog(history, application.resources)
     }
 
@@ -49,7 +48,6 @@ class UsageViewModel(
     init {
         initTimer()
         initFirestore()
-        Log.d("LOG", pLogFirebase.toString())
     }
 
     private fun initFirestore(): LiveData<List<UsageFirestoreModel>> {
@@ -63,9 +61,27 @@ class UsageViewModel(
                 }
 
                 for (doc in docs!!) {
-                    Log.d("DOCS", doc.toObject(UsageFirestoreModel::class.java).toString())
-                    val docObject = doc.toObject(UsageFirestoreModel::class.java)
-                    listFirestoreModel.add(docObject)
+//                    Log.d("DOCS", doc.toObject(UsageFirestoreModel::class.java).toString())
+//                    val docObject = doc.toObject(UsageFirestoreModel::class.java)
+                    val model = UsageFirestoreModel()
+                    doc.getLong("start_timer")?.let {
+                        model.startTimer = it
+                    }
+
+                    doc.getLong("end_timer")?.let {
+                        model.endTimer = it
+                    }
+
+                    doc.getLong("duration")?.let {
+                        model.duration = it.toInt()
+                    }
+
+                    doc.getString("created_at")?.let {
+                        model.createdAt = it
+                    }
+                    listFirestoreModel.add(
+                        model
+                    )
                 }
                 logFirebaseLvData.value = listFirestoreModel
 

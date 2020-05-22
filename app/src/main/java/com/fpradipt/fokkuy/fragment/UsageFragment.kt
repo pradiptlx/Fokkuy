@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.firebase.ui.auth.AuthUI
@@ -20,6 +21,7 @@ import com.firebase.ui.auth.IdpResponse
 import com.fpradipt.fokkuy.R
 import com.fpradipt.fokkuy.databinding.FragmentUsageBinding
 import com.fpradipt.fokkuy.db.TimerUsageDatabase
+import com.fpradipt.fokkuy.model.UsageFirestoreModel
 import com.fpradipt.fokkuy.view_model.UsageViewModel
 import com.fpradipt.fokkuy.view_model.UsageViewModelFactory
 import com.google.firebase.auth.FirebaseAuth
@@ -56,31 +58,10 @@ class UsageFragment : Fragment() {
 
         binding.usageViewModel = viewModel
 
+        viewModel.parsedHist.observe(viewLifecycleOwner, Observer { data ->
+            binding.logView.text = data
+        })
 
-//        val firestore = Firebase.firestore
-//        firestore.collection("users/${auth.currentUser!!.uid}/usages")
-//            .get()
-//            .addOnSuccessListener { docs->
-//                for (doc in docs){
-//                    Log.d("DOC", doc.data.toString())
-//                }
-//            }
-//        val doc = firestore.document("users/${auth.currentUser!!.uid}")
-//        doc.get()
-//            .addOnSuccessListener {documentSnapshot ->
-//                if(documentSnapshot!=null){
-//                    Log.d("DOC", documentSnapshot.data.toString())
-//                }
-//            }
-//        doc.addSnapshotListener { snapshot, e ->
-//            if (e!==null){
-//                Log.d("SNAP", "LISTEN FAILED", e)
-//                return@addSnapshotListener
-//            }
-//            if(snapshot!!.exists()){
-//                Log.d("SNAP", "DATA ${snapshot.data}")
-//            }
-//        }
 
         return binding.root
     }

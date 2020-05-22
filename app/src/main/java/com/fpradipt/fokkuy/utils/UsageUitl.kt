@@ -34,6 +34,7 @@ fun formatLog(log: List<UsageFirestoreModel>, resources: Resources): Spanned {
     sb.apply {
         append(resources.getString(R.string.title))
         log.forEach {
+            Log.d("LOG", it.startTimer.toString())
             append("<br>")
             append(resources.getString(R.string.start_time))
             append("\t${convertLongToDateString(it.startTimer)}<br>")
