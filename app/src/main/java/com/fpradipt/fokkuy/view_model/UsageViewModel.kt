@@ -106,10 +106,16 @@ class UsageViewModel(
     }
 
     fun onClear() {
+        firestore.collection("users/${auth.currentUser?.uid}/${collection}")
+            .get()
+            .addOnSuccessListener { docs ->
+                for (doc in docs!!) {
+                    firestore.document("users/${auth.currentUser?.uid}/${collection}/${doc.id}")
+                        .delete()
+                }
+            }
         uiScope.launch {
             clearHist()
-            firestore.document("users/${auth.currentUser!!.uid}")
-                .delete()
             Log.d("Clear", logUsage.value.toString())
         }
     }
