@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
@@ -22,6 +23,10 @@ import com.fpradipt.fokkuy.db.TimerUsageDatabase
 import com.fpradipt.fokkuy.view_model.UsageViewModel
 import com.fpradipt.fokkuy.view_model.UsageViewModelFactory
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.local.LocalViewChanges
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.InternalCoroutinesApi
 
 /**
@@ -31,6 +36,7 @@ class UsageFragment : Fragment() {
     private lateinit var viewModel: UsageViewModel
     private lateinit var binding: FragmentUsageBinding
     private lateinit var auth: FirebaseAuth
+
     @InternalCoroutinesApi
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,19 +50,45 @@ class UsageFragment : Fragment() {
         checkAuth()
         val application = requireNotNull(this.activity).application
         val dataSource = TimerUsageDatabase.getInstance(application).timerUsageDatabaseDao
-        val viewModelFactory = UsageViewModelFactory(dataSource, application)
+        val viewModelFactory = UsageViewModelFactory(dataSource, application, auth)
 
         viewModel = ViewModelProvider(this, viewModelFactory).get(UsageViewModel::class.java)
 
         binding.usageViewModel = viewModel
 
+
+//        val firestore = Firebase.firestore
+//        firestore.collection("users/${auth.currentUser!!.uid}/usages")
+//            .get()
+//            .addOnSuccessListener { docs->
+//                for (doc in docs){
+//                    Log.d("DOC", doc.data.toString())
+//                }
+//            }
+//        val doc = firestore.document("users/${auth.currentUser!!.uid}")
+//        doc.get()
+//            .addOnSuccessListener {documentSnapshot ->
+//                if(documentSnapshot!=null){
+//                    Log.d("DOC", documentSnapshot.data.toString())
+//                }
+//            }
+//        doc.addSnapshotListener { snapshot, e ->
+//            if (e!==null){
+//                Log.d("SNAP", "LISTEN FAILED", e)
+//                return@addSnapshotListener
+//            }
+//            if(snapshot!!.exists()){
+//                Log.d("SNAP", "DATA ${snapshot.data}")
+//            }
+//        }
+
         return binding.root
     }
 
-    private fun checkAuth(){
+    private fun checkAuth() {
         auth = FirebaseAuth.getInstance()
 
-        if(auth.currentUser == null){
+        if (auth.currentUser == null) {
             binding.scrollView2.visibility = View.GONE
             val providers = arrayListOf(
                 AuthUI.IdpConfig.EmailBuilder().build(),
@@ -67,7 +99,7 @@ class UsageFragment : Fragment() {
                     providers
                 ).build(), DashboardFragment.SIGN_IN_RESULT_CODE
             )
-        }else{
+        } else {
             binding.scrollView2.visibility = View.VISIBLE
         }
     }
@@ -88,14 +120,17 @@ class UsageFragment : Fragment() {
                 // sign-in flow using the back button. Otherwise check
                 // response.getError().getErrorCode() and handle the error.
                 if (response != null) {
-                    Log.i(DashboardFragment.TAG, "Sign in unsuccessful ${response.error?.errorCode}")
+                    Log.i(
+                        DashboardFragment.TAG,
+                        "Sign in unsuccessful ${response.error?.errorCode}"
+                    )
                 }
                 Toast.makeText(context, "Try Again", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
-    companion object{
+    companion object {
         const val TAG = "HISTORY"
         const val SIGN_IN_RESULT_CODE = 1001
     }

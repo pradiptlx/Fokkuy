@@ -7,33 +7,65 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import com.fpradipt.fokkuy.db.TimerUsageDao
+import com.fpradipt.fokkuy.model.UsageFirestoreModel
 import com.fpradipt.fokkuy.model.UsageModel
 import com.fpradipt.fokkuy.utils.formatLog
+import com.google.android.gms.tasks.OnFailureListener
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.*
 import java.time.Instant
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
-import java.util.*
 
 class UsageViewModel(
     private val database: TimerUsageDao,
-    application: Application
+    application: Application,
+    private val auth: FirebaseAuth
 ) : AndroidViewModel(application) {
-
+    private var firestore = Firebase.firestore
     private var viewModelJob = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
     private val _histories = database.getHistory()
+    private var logUsage = MutableLiveData<UsageModel?>()
+    var logFirebaseLvData = MutableLiveData<List<UsageFirestoreModel>>()
+    private var logFirebase = initFirestore()
+    val pLogFirebase: LiveData<List<UsageFirestoreModel>>
+        get() = logFirebase
     val histories: LiveData<List<UsageModel>>
         get() = _histories
 
-    val parsedHist = Transformations.map(_histories) { history ->
+    val parsedHist = Transformations.map(pLogFirebase) { history ->
         formatLog(history, application.resources)
     }
 
-    private var logUsage = MutableLiveData<UsageModel?>()
+    private val collection = "usages"
+
 
     init {
         initTimer()
+        initFirestore()
+        Log.d("LOG", _histories.toString())
+    }
+
+    private fun initFirestore(): MutableLiveData<List<UsageFirestoreModel>> {
+        val listFirestoreModel = mutableListOf<UsageFirestoreModel>()
+        firestore.collection("users/${auth.currentUser!!.uid}/${collection}")
+            .get()
+            .addOnSuccessListener { docs ->
+                for (doc in docs) {
+                    Log.d("DOCS", doc.toObject(UsageFirestoreModel::class.java).toString())
+                    val docObject = doc.toObject(UsageFirestoreModel::class.java)
+                    listFirestoreModel.add(docObject)
+                }
+            }.addOnFailureListener {
+                Log.d("DOCS", "FAILED", it)
+            }
+        logFirebaseLvData.value = listFirestoreModel
+
+        return logFirebaseLvData
     }
 
     private fun initTimer() {
@@ -59,6 +91,7 @@ class UsageViewModel(
         uiScope.launch {
             val logInit = UsageModel()
             logInit.startTimer = System.currentTimeMillis()
+
             insertHist(logInit)
             Log.d("START", logInit.toString())
             logUsage.value = getCurrentData()
@@ -69,11 +102,31 @@ class UsageViewModel(
         uiScope.launch {
             val oldLog = logUsage.value ?: return@launch
             oldLog.endTimer = System.currentTimeMillis()
-            oldLog.duration = ((oldLog.endTimer - oldLog.startTimer) /1000).toInt()
+            oldLog.duration = ((oldLog.endTimer - oldLog.startTimer) / 1000).toInt()
             oldLog.createdAt = DateTimeFormatter
                 .ofPattern("dd-MM-yyyy HH:mm:ss")
                 .withZone(ZoneOffset.systemDefault())
                 .format(Instant.now())
+
+            val firestoreModel = UsageFirestoreModel()
+            firestoreModel.startTimer = oldLog.startTimer
+            firestoreModel.endTimer = oldLog.endTimer
+            firestoreModel.duration = oldLog.duration
+            firestoreModel.createdAt = oldLog.createdAt
+
+            val auth = FirebaseAuth.getInstance()
+            val userId = auth.currentUser?.uid
+            firestore = Firebase.firestore
+            firestore.collection("users")
+                .document(userId.toString())
+                .collection(collection)
+                .add(firestoreModel.toMap())
+                .addOnSuccessListener {
+                    Log.d("Firestore", "Success")
+                }
+                .addOnFailureListener(OnFailureListener { e ->
+                    Log.d("Firestore", "Error add collection", e)
+                })
             updateHist(oldLog)
             Log.d("STOP", oldLog.toString())
         }

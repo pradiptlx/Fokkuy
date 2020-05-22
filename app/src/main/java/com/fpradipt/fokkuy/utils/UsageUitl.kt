@@ -6,6 +6,7 @@ import android.text.Html
 import android.text.Spanned
 import android.util.Log
 import com.fpradipt.fokkuy.R
+import com.fpradipt.fokkuy.model.UsageFirestoreModel
 import com.fpradipt.fokkuy.model.UsageModel
 import com.github.mikephil.charting.data.BarEntry
 import java.text.SimpleDateFormat
@@ -27,7 +28,7 @@ fun convertLongToDateString(systemTime: Long): String {
         .format(systemTime).toString()
 }
 
-fun formatLog(log: List<UsageModel>, resources: Resources): Spanned {
+fun formatLog(log: List<UsageFirestoreModel>, resources: Resources): Spanned {
     Log.d("FORMAT LOG", log.toString())
     val sb = StringBuilder()
     sb.apply {

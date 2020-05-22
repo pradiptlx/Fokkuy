@@ -29,6 +29,7 @@ import com.fpradipt.fokkuy.utils.PrefUtils
 import com.fpradipt.fokkuy.view_model.UsageViewModel
 import com.fpradipt.fokkuy.view_model.UsageViewModelFactory
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.coroutines.InternalCoroutinesApi
 import java.util.*
@@ -72,6 +73,7 @@ class HomeFragment : Fragment(), View.OnClickListener {
     private var secondsRemaining: Long = 0L
     private var isOpen: Boolean = false
 
+    private lateinit var auth: FirebaseAuth
     private lateinit var binding: FragmentHomeBinding
 
     @InternalCoroutinesApi
@@ -80,10 +82,11 @@ class HomeFragment : Fragment(), View.OnClickListener {
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
+        auth = FirebaseAuth.getInstance()
         val app = requireNotNull(this.activity).application
         val dataSource = TimerUsageDatabase.getInstance(app).timerUsageDatabaseDao
 
-        val usageViewModelFactory = UsageViewModelFactory(dataSource, app)
+        val usageViewModelFactory = UsageViewModelFactory(dataSource, app, auth)
         val usageViewModel = ViewModelProvider(this, usageViewModelFactory)
             .get(UsageViewModel::class.java)
         binding.lifecycleOwner = this
@@ -92,7 +95,6 @@ class HomeFragment : Fragment(), View.OnClickListener {
         binding.startTimerButton.visibility = View.INVISIBLE
         binding.pauseTimerButton.visibility = View.INVISIBLE
         binding.resetTimerButton.visibility = View.INVISIBLE
-
 
         // Animation
         /*val fabOpen = AnimationUtils.loadAnimation(context, R.anim.fab_open)
