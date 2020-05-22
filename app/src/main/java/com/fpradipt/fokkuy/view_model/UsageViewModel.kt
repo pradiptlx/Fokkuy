@@ -53,7 +53,7 @@ class UsageViewModel(
     private fun initFirestore(): LiveData<List<UsageFirestoreModel>> {
         val listFirestoreModel = mutableListOf<UsageFirestoreModel>()
 
-        firestore.collection("users/${auth.currentUser!!.uid}/${collection}")
+        firestore.collection("users/${auth.currentUser?.uid}/${collection}")
             .addSnapshotListener { docs, e ->
                 if (e != null) {
                     logFirebaseLvData.value = null
